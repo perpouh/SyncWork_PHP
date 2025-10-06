@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Enums\UserRole;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -51,11 +52,11 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === UserRole::ADMIN;
+        return $this->role === UserRole::ADMIN->value;
     }
 
     public function isManager(): bool
     {
-        return $this->role === UserRole::MANAGER;
+        return $this->role === UserRole::MANAGER->value;
     }
 }
