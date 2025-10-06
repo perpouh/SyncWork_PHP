@@ -14,22 +14,33 @@ import {
 import { dashboard } from '@/routes';
 import { index } from '@/routes/users';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, User } from 'lucide-vue-next';
+import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Users',
-        href: index(),
-        icon: User,
-    },
-];
+const page = usePage();
+
+const mainNavItems = computed<NavItem[]>(() => {
+    const items: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+    ];
+
+    // 管理者のみがUsersメニューを表示できる
+    if (page.props.auth.user && page.props.auth.user.isAdmin) {
+        items.push({
+            title: 'Users',
+            href: index(),
+            icon: User,
+        });
+    }
+
+    return items;
+});
 
 const footerNavItems: NavItem[] = [
     {
