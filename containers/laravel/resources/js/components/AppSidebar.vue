@@ -12,7 +12,8 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import { index } from '@/routes/users';
+import { index as project_index } from '@/routes/projects';
+import { index as user_index } from '@/routes/users';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, User } from 'lucide-vue-next';
@@ -28,13 +29,18 @@ const mainNavItems = computed<NavItem[]>(() => {
             href: dashboard(),
             icon: LayoutGrid,
         },
+        {
+            title: 'Projects',
+            href: project_index(),
+            icon: Folder,
+        }
     ];
 
     // 管理者のみがUsersメニューを表示できる
     if (page.props.auth.user && page.props.auth.user.isAdmin) {
         items.push({
             title: 'Users',
-            href: index(),
+            href: user_index(),
             icon: User,
         });
     }
