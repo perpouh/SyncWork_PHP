@@ -39,4 +39,9 @@ export interface User {
     isManager: boolean;
 }
 
+export interface Project {
+    id: number;
+    title: string;
+    description: string;
+}
 export type BreadcrumbItemType = BreadcrumbItem;

@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Project;
+use App\Http\Requests\ProjectRequest;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class ProjectController extends Controller
+{
+  use AuthorizesRequests;
+
+  public function index()
+  {
+    $this->authorize('viewAny', Project::class);
+    return Inertia::render('projects/Index', [
+      'projects' => Project::all(),
+    ]);
+  }
+
+  public function show($id)
+  {
+    $project = Project::findOrFail($id);
+    $this->authorize('view', $project);
+    return Inertia::render('projects/Show', [
+      'project' => $project,
+    ]);
+  }
+
+  public function create()
+  {
+    $this->authorize('create', Project::class);
+    return Inertia::render('projects/Create');
+  }
+
+  public function store(ProjectRequest $request)
+  {
+    $this->authorize('create', Project::class);
+    $project = Project::create($request->validated());
+    return redirect()->route('projects.index');
+  }
+
+  public function edit($id)
+  {
+    $project = Project::findOrFail($id);
+    $this->authorize('update', $project);
+    return Inertia::render('projects/Edit', [
+      'project' => $project,
+    ]);
+  }
+
+  public function update(Request $request, $id)
+  {
+    $project = Project::findOrFail($id);
+    $project->update($request->validated());
+    $this->authorize('update', $project);
+    return redirect()->route('projects.index');
+  }
+  
+  public function destroy($id)
+  {
+    $project = Project::findOrFail($id);
+    $this->authorize('delete', $project);
+    $project->delete();
+    return redirect()->route('projects.index');
+  }
+
+  public function archive($id)
+  {
+    $project = Project::findOrFail($id);
+    $this->authorize('archive', $project);
+    $project->archive();
+    return redirect()->route('projects.index');
+  }
+
+  public function unarchive($id)
+  {
+    $project = Project::findOrFail($id);
+    $this->authorize('archive', $project);
+    $project->unarchive();
+    return redirect()->route('projects.index');
+  }
+
+}
