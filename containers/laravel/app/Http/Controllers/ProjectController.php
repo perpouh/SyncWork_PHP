@@ -16,13 +16,13 @@ class ProjectController extends Controller
   {
     $this->authorize('viewAny', Project::class);
     return Inertia::render('projects/Index', [
-      'projects' => Project::all(),
+      'projects' => Project::with(['members.user'])->get(),
     ]);
   }
 
   public function show($id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('view', $project);
     return Inertia::render('projects/Show', [
       'project' => $project,

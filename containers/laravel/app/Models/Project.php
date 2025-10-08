@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $title
@@ -16,6 +17,11 @@ class Project extends Model
         'description',
         'archived_at'
     ];
+
+    public function members(): HasMany
+    {
+        return $this->hasMany(Member::class);
+    }
     /**
      * Archive the project
      *
