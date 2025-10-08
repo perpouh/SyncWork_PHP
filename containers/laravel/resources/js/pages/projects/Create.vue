@@ -6,6 +6,8 @@
         :title="formData.title"
         :description="formData.description"
         submit-text="Create Project"
+        :members="[]"
+        :form-props="store.form()"
         @update:title="formData.title = $event"
         @update:description="formData.description = $event"
       />
@@ -20,6 +22,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import ProjectForm from './ProjectForm.vue';
+import { store } from '@/routes/projects';
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {

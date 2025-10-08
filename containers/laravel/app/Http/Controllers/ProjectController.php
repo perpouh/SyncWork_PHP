@@ -16,13 +16,13 @@ class ProjectController extends Controller
   {
     $this->authorize('viewAny', Project::class);
     return Inertia::render('projects/Index', [
-      'projects' => Project::all(),
+      'projects' => Project::with(['members.user'])->get(),
     ]);
   }
 
   public function show($id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('view', $project);
     return Inertia::render('projects/Show', [
       'project' => $project,
@@ -39,21 +39,22 @@ class ProjectController extends Controller
   {
     $this->authorize('create', Project::class);
     $project = Project::create($request->validated());
+    $project->members()->createMany($request->members);
     return redirect()->route('projects.index');
   }
 
   public function edit($id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('update', $project);
     return Inertia::render('projects/Edit', [
       'project' => $project,
     ]);
   }
 
-  public function update(Request $request, $id)
+  public function update(ProjectRequest $request, $id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $project->update($request->validated());
     $this->authorize('update', $project);
     return redirect()->route('projects.index');

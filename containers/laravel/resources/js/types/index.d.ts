@@ -39,9 +39,19 @@ export interface User {
     isManager: boolean;
 }
 
+export interface Member {
+    id: number | null;
+    name: string;
+    role: number;
+    status: string;
+    assigned_at: string;
+    user_id: number;
+}
+
 export interface Project {
     id: number;
     title: string;
     description: string;
+    members: Member[];
 }
 export type BreadcrumbItemType = BreadcrumbItem;
