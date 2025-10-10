@@ -18,7 +18,8 @@
       </Form>
       <div class="grid gap-2">
         <div v-for="user in users" :key="user.id">
-          <p>{{ user.name }}</p>
+          <p>{{ user.name }} {{ user.email }}</p>
+          <Button type="button" @click="emit('addMember', user)">追加</Button>
         </div>
       </div>
     </DialogContent>
@@ -38,6 +39,11 @@ import { Input } from '@/components/ui/input';
 import type { User } from '@/types';
 import { ref } from 'vue';
 import axios from 'axios';
+
+const emit = defineEmits<{
+  addMember: [user: User]
+}>();
+
 const name = ref('');
 const email = ref('');
 const users = ref<User[]>([]);
