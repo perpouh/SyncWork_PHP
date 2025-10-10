@@ -3,6 +3,7 @@
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <h1>{{ project.title }}</h1>
       <MemberList :members="project.members" />
+      <AddMemberModal :project="project" />
     </div>
   </AppLayout>
 </template>
@@ -12,6 +13,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { type Project } from '@/types';
 import MemberList from './MemberList.vue';
+import AddMemberModal from './AddMemberModal.vue';
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
