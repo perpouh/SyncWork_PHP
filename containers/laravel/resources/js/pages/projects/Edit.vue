@@ -6,8 +6,11 @@
         :title="formData.title"
         :description="formData.description"
         submit-text="Update Project"
+        :members="formData.members"
+        :form-props="update.form(props.project.id)"
         @update:title="formData.title = $event"
         @update:description="formData.description = $event"
+        @update:members="formData.members.push($event)"
       />
     </div>
   </AppLayout>
@@ -21,6 +24,7 @@ import { Head } from '@inertiajs/vue3';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { type Project } from '@/types';
 import ProjectForm from './ProjectForm.vue';
+import { update } from '@/routes/projects';
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
@@ -36,5 +40,6 @@ const props = defineProps<{
 const formData = ref({
   title: props.project.title,
   description: props.project.description,
+  members: props.project.members,
 });
 </script>

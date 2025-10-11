@@ -51,7 +51,7 @@ class ProjectController extends Controller
     ]);
   }
 
-  public function update(Request $request, $id)
+  public function update(ProjectRequest $request, $id)
   {
     $project = Project::findOrFail($id);
     $project->update($request->validated());
