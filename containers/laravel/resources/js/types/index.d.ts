@@ -40,11 +40,12 @@ export interface User {
 }
 
 export interface Member {
-    id: number;
+    id: number | null;
     name: string;
     role: number;
     status: string;
     assigned_at: string;
+    user_id: number;
 }
 
 export interface Project {

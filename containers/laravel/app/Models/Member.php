@@ -47,6 +47,7 @@ class Member extends Model
             'status' => $this->status,
             'assigned_at' => $this->assigned_at,
             'user' => $this->user ? $this->user->toArray() : null,
+            'user_id' => $this->user_id,
         ];
     }
 }

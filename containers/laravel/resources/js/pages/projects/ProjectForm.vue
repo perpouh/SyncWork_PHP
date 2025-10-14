@@ -1,10 +1,11 @@
 <template>
   <Form v-bind="formProps" class="flex flex-col gap-6" v-slot="{ errors, processing }">
-    <Input :default-value="title" @input="updateTitle" name="title" placeholder="Title" />
-    <Input :default-value="description" @input="updateDescription" name="description"
-      placeholder="Description" />
-      <MemberList :members="members" />
-      <AddMemberModal @addMember="addMember" />
+    <Input :default-value="title" name="title" placeholder="Title" />
+    <Input :default-value="description" name="description" placeholder="Description" />
+    <MemberList :members="members" />
+    <AddMemberModal @addMember="addMember" />
+    <Input type="hidden" :name="`members[${index}].user_id`" v-for="(member, index) in members" :key="member.user_id"
+      :default-value="member.user_id" />
     <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing" data-test="submit-button">
       <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
       {{ submitText }}
@@ -33,28 +34,31 @@ const props = defineProps<{
 const members = ref(props.members);
 
 const emit = defineEmits<{
-  'update:title': [value: string];
-  'update:description': [value: string];
-  'update:members': [value: Member];
+  // 'update:title': [value: string];
+  // 'update:description': [value: string];
+  'add:members': [value: Member];
 }>();
 
-const updateTitle = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit('update:title', target.value);
-};
+// const updateTitle = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   emit('update:title', target.value);
+// };
 
-const updateDescription = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit('update:description', target.value);
-};
+// const updateDescription = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   emit('update:description', target.value);
+// };
 
 const addMember = (user: User) => {
-  emit('update:members', {
-    id: user.id,
+  var member = {
+    id: null,
+    user_id: user.id,
     name: user.name,
     role: user.role,
     status: 'active',
     assigned_at: new Date().toISOString(),
-  });
+  };
+  members.value.push(member);
+  // emit('add:members', member);
 };
 </script>

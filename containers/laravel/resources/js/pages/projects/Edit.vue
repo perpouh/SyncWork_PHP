@@ -8,9 +8,6 @@
         submit-text="Update Project"
         :members="formData.members"
         :form-props="update.form(props.project.id)"
-        @update:title="formData.title = $event"
-        @update:description="formData.description = $event"
-        @update:members="formData.members.push($event)"
       />
     </div>
   </AppLayout>

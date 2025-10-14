@@ -39,12 +39,13 @@ class ProjectController extends Controller
   {
     $this->authorize('create', Project::class);
     $project = Project::create($request->validated());
+    $project->members()->createMany($request->members);
     return redirect()->route('projects.index');
   }
 
   public function edit($id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('update', $project);
     return Inertia::render('projects/Edit', [
       'project' => $project,
@@ -53,7 +54,7 @@ class ProjectController extends Controller
 
   public function update(ProjectRequest $request, $id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $project->update($request->validated());
     $this->authorize('update', $project);
     return redirect()->route('projects.index');
