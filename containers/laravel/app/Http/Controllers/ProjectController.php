@@ -7,6 +7,7 @@ use App\Http\Requests\ProjectRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -16,13 +17,13 @@ class ProjectController extends Controller
   {
     $this->authorize('viewAny', Project::class);
     return Inertia::render('projects/Index', [
-      'projects' => Project::all(),
+      'projects' => Project::with(['members.user'])->get(),
     ]);
   }
 
   public function show($id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('view', $project);
     return Inertia::render('projects/Show', [
       'project' => $project,
@@ -39,23 +40,37 @@ class ProjectController extends Controller
   {
     $this->authorize('create', Project::class);
     $project = Project::create($request->validated());
+    $project->members()->createMany($request->members);
     return redirect()->route('projects.index');
   }
 
   public function edit($id)
   {
-    $project = Project::findOrFail($id);
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('update', $project);
     return Inertia::render('projects/Edit', [
       'project' => $project,
     ]);
   }
 
-  public function update(Request $request, $id)
+  public function update(ProjectRequest $request, $id)
   {
-    $project = Project::findOrFail($id);
-    $project->update($request->validated());
+    $project = Project::with(['members.user'])->findOrFail($id);
     $this->authorize('update', $project);
+    DB::transaction(function () use ($project, $request) {
+        $validated = $request->validated();
+  
+        // プロジェクト自体を更新
+        $project->update($validated);
+  
+        // メンバーを更新（既存削除→再作成など）
+        if (isset($validated['members'])) {
+          $additionalMembers = array_filter($validated['members'], function ($member) {
+            return $member['id'] === null;
+          });
+          $project->members()->createMany($additionalMembers);
+        }
+    });
     return redirect()->route('projects.index');
   }
   

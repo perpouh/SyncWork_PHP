@@ -15,6 +15,11 @@ class ProjectRequest extends FormRequest
     return [
       'title' => 'required|string|max:255',
       'description' => 'string|max:255',
+      'members.*.id' => 'nullable',
+      'members.*.user_id' => 'required|exists:users,id',
+      'members.*.role' => 'required|string|max:255',
+      'members.*.status' => 'required|string|max:255',
+      'members.*.assigned_at' => 'required|date',
     ];
   }
 }

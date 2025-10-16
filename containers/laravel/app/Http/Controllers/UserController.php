@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
@@ -14,10 +15,12 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $user = auth()->user(); //ユーザ情報を取得
+        $users = QueryBuilder::for(User::class)
+            ->allowedFilters(['name', 'email'])
+            ->get();
 
         return Inertia::render('users/Index',[
-            'users' => User::all(),
+            'users' => $users,
         ]);
     }
 
