@@ -7,6 +7,7 @@ use App\Http\Requests\ProjectRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -55,8 +56,21 @@ class ProjectController extends Controller
   public function update(ProjectRequest $request, $id)
   {
     $project = Project::with(['members.user'])->findOrFail($id);
-    $project->update($request->validated());
     $this->authorize('update', $project);
+    DB::transaction(function () use ($project, $request) {
+        $validated = $request->validated();
+  
+        // プロジェクト自体を更新
+        $project->update($validated);
+  
+        // メンバーを更新（既存削除→再作成など）
+        if (isset($validated['members'])) {
+          $additionalMembers = array_filter($validated['members'], function ($member) {
+            return $member['id'] === null;
+          });
+          $project->members()->createMany($additionalMembers);
+        }
+    });
     return redirect()->route('projects.index');
   }
   

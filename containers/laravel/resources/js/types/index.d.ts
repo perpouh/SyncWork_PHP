@@ -30,7 +30,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    role: number;
+    role: string;
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;
@@ -42,7 +42,7 @@ export interface User {
 export interface Member {
     id: number | null;
     name: string;
-    role: number;
+    role: string;
     status: string;
     assigned_at: string;
     user_id: number;

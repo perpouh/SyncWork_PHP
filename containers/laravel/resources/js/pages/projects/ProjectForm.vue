@@ -2,10 +2,8 @@
   <Form v-bind="formProps" class="flex flex-col gap-6" v-slot="{ errors, processing }">
     <Input :default-value="title" name="title" placeholder="Title" />
     <Input :default-value="description" name="description" placeholder="Description" />
-    <MemberList :members="members" />
+    <MemberList :members="members" @update:status="updateStatus" @update:role="updateRole" />
     <AddMemberModal @addMember="addMember" />
-    <Input type="hidden" :name="`members[${index}].user_id`" v-for="(member, index) in members" :key="member.user_id"
-      :default-value="member.user_id" />
     <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing" data-test="submit-button">
       <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
       {{ submitText }}
@@ -54,11 +52,19 @@ const addMember = (user: User) => {
     id: null,
     user_id: user.id,
     name: user.name,
-    role: user.role,
+    role: '',
     status: 'active',
     assigned_at: new Date().toISOString(),
   };
   members.value.push(member);
   // emit('add:members', member);
+};
+
+const updateStatus = (user_id: number, status: string) => {
+  members.value.find(member => member.user_id === user_id)!.status = status;
+};
+
+const updateRole = (user_id: number, role: string) => {
+  members.value.find(member => member.user_id === user_id)!.role = role;
 };
 </script>
