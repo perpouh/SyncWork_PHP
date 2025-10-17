@@ -40,7 +40,9 @@ class ProjectController extends Controller
   {
     $this->authorize('create', Project::class);
     $project = Project::create($request->validated());
-    $project->members()->createMany($request->members);
+    if (isset($request->members)) {
+      $project->members()->createMany($request->members);
+    }
     return redirect()->route('projects.index');
   }
 
