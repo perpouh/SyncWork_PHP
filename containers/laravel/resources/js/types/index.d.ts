@@ -62,5 +62,8 @@ export interface Ticket {
     status: string;
     priority: string;
     type: string;
+    assignee: User;
+    created_at: string;
+    updated_at: string;
 }
 export type BreadcrumbItemType = BreadcrumbItem;
