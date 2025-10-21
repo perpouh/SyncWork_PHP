@@ -20,6 +20,7 @@ class TicketRequest extends FormRequest
             'priority' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'reporter_id' => 'required|exists:users,id',
+            'assignee_id' => 'required|exists:users,id',
         ];
     }
 }

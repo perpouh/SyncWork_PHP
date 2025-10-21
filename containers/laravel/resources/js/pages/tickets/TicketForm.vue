@@ -5,6 +5,7 @@
     <Select :options="statusOptions" name="status" placeholder="Status" :default-value="ticket.status" />
     <Select :options="priorityOptions" name="priority" placeholder="Priority" :default-value="ticket.priority" />
     <Select :options="typeOptions" name="type" placeholder="Type" :default-value="ticket.type" />
+    <Select :options="membersOptions" name="assignee_id" placeholder="Asignee" :default-value="ticket.assignee?.name ?? ''" />
     <Input type="hidden" name="reporter_id" :default-value="user.id" />
     <Button type="submit" :disabled="processing">Create Ticket</Button>
   </Form>
@@ -16,8 +17,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Form } from '@inertiajs/vue3';
-import type { Project, Ticket } from '@/types';
+import { Combobox } from '@/components/ui/combobox';
+import type { Project, Ticket, Member } from '@/types';
 import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 const page = usePage();
 const user = page.props.auth.user;
 
@@ -25,6 +28,7 @@ const props = defineProps<{
   project: Project;
   ticket: Ticket;
   formProps: Record<string, any>;
+  members: Member[];
 }>();
 
 const statusOptions = [
@@ -47,4 +51,10 @@ const typeOptions = [
   { label: 'Task', value: 'task' },
   { label: 'Uncategorized', value: 'uncategorized' },
 ];
+
+const membersOptions = computed(() => {
+  return props.members.map((member) => {
+    return { label: member.name, value: member.id?.toString() ?? '' };
+  });
+});
 </script>

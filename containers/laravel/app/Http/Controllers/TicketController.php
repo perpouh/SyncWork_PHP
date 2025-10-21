@@ -16,7 +16,7 @@ class TicketController extends Controller
     {
         $this->authorize('viewAny', Ticket::class);
         $project = Project::find($project_id);
-        $tickets = $project->tickets;
+        $tickets = $project->tickets()->with(['assignee', 'reporter'])->get();
         return Inertia::render('tickets/Index', [
             'tickets' => $tickets,
             'project' => $project,
@@ -26,11 +26,12 @@ class TicketController extends Controller
     public function create($project_id)
     {
         $this->authorize('create', Ticket::class);
-        $project = Project::find($project_id);
+        $project = Project::with(['members.user'])->find($project_id);
         $ticket = $project->tickets->make();
         return Inertia::render('tickets/Create', [
             'project' => $project,
-            'ticket' => $ticket
+            'ticket' => $ticket,
+            'members' => $project->members->toArray()
         ]);
     }
 
@@ -45,7 +46,7 @@ class TicketController extends Controller
     public function show($project_id, $ticket_id)
     {
         $project = Project::find($project_id);
-        $ticket = $project->tickets()->findOrFail($ticket_id);
+        $ticket = $project->tickets()->with(['assignee', 'reporter'])->findOrFail($ticket_id);
         $this->authorize('view', $ticket);
         return Inertia::render('tickets/Show', [
             'ticket' => $ticket,
@@ -55,12 +56,13 @@ class TicketController extends Controller
 
     public function edit($project_id, $ticket_id)
     {
-        $project = Project::find($project_id);
-        $ticket = $project->tickets()->findOrFail($ticket_id);
+        $project = Project::with(['members.user'])->find($project_id);
+        $ticket = $project->tickets()->with(['assignee', 'reporter'])->findOrFail($ticket_id);
         $this->authorize('update', $ticket);
         return Inertia::render('tickets/Edit', [
             'ticket' => $ticket,
             'project' => $project,
+            'members' => $project->members->toArray()
         ]);
     }
 

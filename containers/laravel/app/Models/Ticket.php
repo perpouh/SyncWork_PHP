@@ -15,7 +15,7 @@ use App\Enums\TicketType;
  * @property TicketStatus $status
  * @property TicketPriority $priority
  * @property TicketType $type
- * @property int $asignee_id
+ * @property int $assignee_id
  * @property int $reporter_id
  */
 class Ticket extends Model
@@ -27,7 +27,7 @@ class Ticket extends Model
         'status',
         'priority',
         'type',
-        'asignee_id',
+        'assignee_id',
         'reporter_id',
     ];
 
@@ -36,9 +36,9 @@ class Ticket extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function asignee(): BelongsTo
+    public function assignee(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'asignee_id');
+        return $this->belongsTo(User::class, 'assignee_id');
     }
 
     public function reporter(): BelongsTo
