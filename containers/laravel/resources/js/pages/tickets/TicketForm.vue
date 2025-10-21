@@ -17,7 +17,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Form } from '@inertiajs/vue3';
-import { Combobox } from '@/components/ui/combobox';
 import type { Project, Ticket, Member } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';

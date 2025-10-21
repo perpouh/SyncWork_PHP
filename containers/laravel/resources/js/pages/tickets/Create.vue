@@ -21,13 +21,10 @@ const breadcrumbItems: BreadcrumbItem[] = [
   },
 ];
 
-const props = defineProps<{
+defineProps<{
   project: Project;
   ticket: Ticket;
   members: Member[];
 }>();
 
-// const formData = ref({
-//   ticket: null
-// });
 </script>
