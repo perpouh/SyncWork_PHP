@@ -54,4 +54,16 @@ export interface Project {
     description: string;
     members: Member[];
 }
+
+export interface Ticket {
+    id: number;
+    title: string;
+    description: string;
+    status: string;
+    priority: string;
+    type: string;
+    assignee: User;
+    created_at: string;
+    updated_at: string;
+}
 export type BreadcrumbItemType = BreadcrumbItem;

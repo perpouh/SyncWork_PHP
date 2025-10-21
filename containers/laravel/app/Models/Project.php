@@ -22,6 +22,10 @@ class Project extends Model
     {
         return $this->hasMany(Member::class);
     }
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
     /**
      * Archive the project
      *
