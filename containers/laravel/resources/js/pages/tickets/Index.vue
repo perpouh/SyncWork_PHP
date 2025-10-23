@@ -2,6 +2,7 @@
   <AppLayout :breadcrumbs="breadcrumbItems">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <h1>Tickets</h1>
+      <SearchForm :project="project" :members="members" :title="title" :status="status" :priority="priority" :type="type" :assignee="assignee" :reporter="reporter" />
       <table>
         <thead>
           <tr>
@@ -20,7 +21,7 @@
             <td><Link :href="show({project_id: project.id, ticket_id: ticket.id})">{{ ticket.title }}</Link></td>
             <td>{{ ticket.status }}</td>
             <td>{{ ticket.priority }}</td>
-            <td>{{ ticket.assignee }}</td>
+            <td>{{ ticket.assignee?.name }}</td>
             <td>{{ ticket.type }}</td>
             <td>{{ ticket.created_at }}</td>
           </tr>
@@ -36,12 +37,20 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { show } from '@/routes/tickets';
-import { type Project, type Ticket } from '@/types';
+import { type Project, type Ticket, type Member } from '@/types';
 import { computed } from 'vue';
+import SearchForm from './SearchForm.vue';
 
 const props = defineProps<{
   project: Project,
+  title: string;
+  status: string;
+  priority: string;
+  type: string;
+  assignee: string;
+  reporter: string;
   tickets: Ticket[];
+  members: Member[];
 }>();
 
 const project = computed(() => props.project);

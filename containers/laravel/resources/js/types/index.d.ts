@@ -62,6 +62,7 @@ export interface Ticket {
     status: string;
     priority: string;
     type: string;
+    reporter: User;
     assignee: User;
     created_at: string;
     updated_at: string;
