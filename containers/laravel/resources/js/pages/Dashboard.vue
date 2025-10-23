@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Ticket } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
-
+import TicketList from '../components/TicketList.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
         href: dashboard().url,
     },
 ];
+
+const props = defineProps<{
+    tickets: Ticket[];
+}>();
 </script>
 
 <template>
@@ -40,7 +44,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <div
                 class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
             >
-                <PlaceholderPattern />
+                <TicketList :tickets="tickets" />
             </div>
         </div>
     </AppLayout>

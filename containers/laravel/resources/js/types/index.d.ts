@@ -66,5 +66,6 @@ export interface Ticket {
     assignee: User;
     created_at: string;
     updated_at: string;
+    project: Project;
 }
 export type BreadcrumbItemType = BreadcrumbItem;
