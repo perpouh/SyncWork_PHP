@@ -12,28 +12,51 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as project_index } from '@/routes/projects';
+import { index as user_index } from '@/routes/users';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { Link, usePage } from '@inertiajs/vue3';
+import { BookOpen, Folder, LayoutGrid, User } from 'lucide-vue-next';
+import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const page = usePage();
+
+const mainNavItems = computed<NavItem[]>(() => {
+    const items: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Projects',
+            href: project_index(),
+            icon: Folder,
+        }
+    ];
+
+    // 管理者のみがUsersメニューを表示できる
+    if (page.props.auth.user && page.props.auth.user.isAdmin) {
+        items.push({
+            title: 'Users',
+            href: user_index(),
+            icon: User,
+        });
+    }
+
+    return items;
+});
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        href: 'https://github.com/perpouh/SyncWork_PHP',
         icon: Folder,
     },
     {
         title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
+        href: 'https://perpouh.github.io/SyncWork_PHP/',
         icon: BookOpen,
     },
 ];

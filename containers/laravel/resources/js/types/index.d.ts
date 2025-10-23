@@ -30,10 +30,41 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    role: string;
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    isAdmin: boolean;
+    isManager: boolean;
 }
 
+export interface Member {
+    id: number | null;
+    name: string;
+    role: string;
+    status: string;
+    assigned_at: string;
+    user_id: number;
+}
+
+export interface Project {
+    id: number;
+    title: string;
+    description: string;
+    members: Member[];
+}
+
+export interface Ticket {
+    id: number;
+    title: string;
+    description: string;
+    status: string;
+    priority: string;
+    type: string;
+    reporter: User;
+    assignee: User;
+    created_at: string;
+    updated_at: string;
+}
 export type BreadcrumbItemType = BreadcrumbItem;
