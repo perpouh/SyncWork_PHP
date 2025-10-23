@@ -8,18 +8,32 @@ use App\Models\Project;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\TicketRequest;
+use App\Http\Requests\TicketSearchRequest;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class TicketController extends Controller
 {
     use AuthorizesRequests;
-    public function index($project_id)
+    public function index(Request $request, $project_id)
     {
         $this->authorize('viewAny', Ticket::class);
         $project = Project::find($project_id);
-        $tickets = $project->tickets()->with(['assignee', 'reporter'])->get();
+        $tickets = QueryBuilder::for(Ticket::class)
+          ->allowedFilters(['title', 'status', 'priority', 'type', 'assignee', 'reporter'])
+          ->allowedIncludes(['assignee', 'reporter'])
+          ->where('project_id', $project_id)
+          ->get();
         return Inertia::render('tickets/Index', [
             'tickets' => $tickets,
             'project' => $project,
+            'members' => $project->members->toArray(),
+            'title' => $request->input('filter.title'),
+            'status' => $request->input('filter.status'),
+            'priority' => $request->input('filter.priority'),
+            'type' => $request->input('filter.type'),
+            'assignee' => $request->input('filter.assignee'),
+            'reporter' => $request->input('filter.reporter'),
         ]);
     }
 
